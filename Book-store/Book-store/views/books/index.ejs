@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Store Management</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#F8F5F0;
+    padding:40px 20px;
+    color:#374151;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.header-content h1{
+    color:#7F1D1D;
+    font-size:36px;
+    margin-bottom:5px;
+}
+
+.total{
+    color:#6B7280;
+    font-size:15px;
+}
+
+.btn{
+    text-decoration:none;
+    padding:12px 20px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+    display:inline-block;
+}
+
+.btn-add{
+    background:#7F1D1D;
+    color:#fff;
+}
+
+.btn-add:hover{
+    background:#5B1414;
+}
+
+.btn-edit{
+    background:#D4A017;
+    color:#fff;
+}
+
+.btn-edit:hover{
+    background:#B8890D;
+}
+
+.btn-delete{
+    background:#DC2626;
+    color:#fff;
+}
+
+.btn-delete:hover{
+    background:#B91C1C;
+}
+
+.card{
+    background:#fff;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#7F1D1D;
+    color:white;
+    padding:16px;
+    text-align:left;
+    font-size:14px;
+}
+
+td{
+    padding:16px;
+    border-bottom:1px solid #EEE7DD;
+    vertical-align:middle;
+}
+
+tr:hover{
+    background:#FCFAF7;
+}
+
+.book-image{
+    width:60px;
+    height:80px;
+    object-fit:cover;
+    border-radius:8px;
+    border:2px solid #EEE7DD;
+}
+
+.no-image{
+    color:#9CA3AF;
+    font-size:13px;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+}
+
+form{
+    display:inline;
+}
+
+.empty{
+    text-align:center;
+    padding:50px;
+    color:#6B7280;
+    font-size:18px;
+}
+
+@media(max-width:900px){
+
+    .card{
+        overflow-x:auto;
+    }
+
+    table{
+        min-width:900px;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+    <div class="header-content">
+        <h1>Book Store Management</h1>
+
+        <p class="total">
+            Total Books :
+            <strong><%= books.length %></strong>
+        </p>
+    </div>
+
+    <a href="/books/add" class="btn btn-add">
+        + Add New Book
+    </a>
+
+</div>
+
+<% if(books.length > 0){ %>
+
+<div class="card">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        <% books.forEach(book => { %>
+
+            <tr>
+
+                <td>
+                    <% if(book.image){ %>
+                        <img
+                            src="/uploads/<%= book.image %>"
+                            alt="Book"
+                            class="book-image">
+                    <% } else { %>
+                        <span class="no-image">No Image</span>
+                    <% } %>
+                </td>
+
+                <td><strong><%= book.title %></strong></td>
+
+                <td><%= book.author %></td>
+
+                <td><%= book.category %></td>
+
+                <td>₹<%= book.price %></td>
+
+                <td><%= book.quantity %></td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <a href="/books/edit/<%= book._id %>"
+                           class="btn btn-edit">
+                           Edit
+                        </a>
+
+                        <form action="/books/delete/<%= book._id %>?_method=DELETE"
+                              method="POST">
+
+                            <button
+                                type="submit"
+                                class="btn btn-delete"
+                                onclick="return confirm('Delete this book?')">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        <% }) %>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<% } else { %>
+
+    <div class="card">
+        <div class="empty">
+            No Books Available
+        </div>
+    </div>
+
+<% } %>
+
+</div>
+
+</body>
+</html>
